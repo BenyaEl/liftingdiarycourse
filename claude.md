@@ -10,6 +10,35 @@ A Next.js application for tracking weightlifting workouts and progress over time
 - **Styling**: Tailwind CSS 4
 - **Font**: Geist (Sans & Mono)
 
+## 🚨 CRITICAL: Coding Standards & Documentation
+
+**MANDATORY FOR ALL CODE GENERATION:**
+
+When creating or modifying ANY code in this project, you MUST:
+
+1. **ALWAYS refer to the relevant documentation files in the `/docs` directory**
+2. **STRICTLY follow all standards outlined in these documents**
+3. **Review the appropriate doc file BEFORE writing any code**
+
+### Documentation Files
+
+| Document | Purpose | When to Reference |
+|----------|---------|-------------------|
+| `docs/ui.md` | UI coding standards, component usage, date formatting | **EVERY TIME** you create UI components, forms, or handle dates |
+
+### Enforcement
+
+- ⛔ **NO code should be written without first consulting the relevant docs**
+- ⛔ **ALL code must comply with the standards in `/docs`**
+- ⛔ **Non-compliant code will be rejected immediately**
+
+### Before Writing Code - Checklist
+
+- [ ] Identified which doc files are relevant to my task
+- [ ] Read and understood the applicable standards
+- [ ] Verified my implementation follows ALL documented rules
+- [ ] Double-checked for any violations (e.g., custom components, wrong date format)
+
 ## Project Status
 - [x] Project initialized with create-next-app
 - [x] Development server running on http://localhost:3000
