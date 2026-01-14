@@ -13,16 +13,20 @@ import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 // Exercises Table - Master exercise library
 export const exercisesTable = pgTable("exercises", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar({ length: 255 }).notNull().unique(),
+  name: varchar({ length: 255 }).notNull(),
   videoUrl: varchar("video_url", { length: 500 }),
   isCustom: boolean("is_custom").default(false).notNull(),
+  userId: varchar("user_id", { length: 255 }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+}, (table) => ({
+  nameUserIdx: index("exercises_name_user_idx").on(table.name, table.userId),
+}));
 
 // Workouts Table - Individual workout sessions
 export const workoutsTable = pgTable("workouts", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: varchar("user_id", { length: 255 }).notNull(),
   workoutDate: timestamp("workout_date").defaultNow().notNull(),
   title: varchar({ length: 255 }),
   startedAt: timestamp("started_at"),
@@ -31,6 +35,7 @@ export const workoutsTable = pgTable("workouts", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }, (table) => ({
   workoutDateIdx: index("workouts_workout_date_idx").on(table.workoutDate),
+  userIdIdx: index("workouts_user_id_idx").on(table.userId),
 }));
 
 // Workout Exercises Table - Junction between workouts and exercises

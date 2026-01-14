@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Bash(npm install:*)",
+      "Bash(taskkill:*)",
+      "Bash(npx drizzle-kit:*)",
+      "Bash(npx tsx list-tables.ts)",
+      "Bash(npx tsx seed.ts)",
+      "Bash(npx tsx:*)"
+    ]
+  }
+}
