@@ -25,6 +25,7 @@ When creating or modifying ANY code in this project, you MUST:
 | Document | Purpose | When to Reference |
 |----------|---------|-------------------|
 | `docs/ui.md` | UI coding standards, component usage, date formatting | **EVERY TIME** you create UI components, forms, or handle dates |
+| `docs/data-fetching.md` | Data fetching standards, database queries, user data isolation | **EVERY TIME** you fetch data, query the database, or create data access functions |
 
 ### Enforcement
 
