@@ -8,7 +8,12 @@
       "Bash(npx tsx list-tables.ts)",
       "Bash(npx tsx seed.ts)",
       "Bash(npx tsx:*)",
-      "Bash(npx shadcn:*)"
+      "Bash(npx shadcn:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(npx shadcn@latest add input label select -y)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)"
     ]
   }
 }
