@@ -10,6 +10,26 @@ import {
 } from "@/src/db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+
+// Types for creating workouts
+export interface CreateSetInput {
+  reps: number;
+  weight: string | null;
+  weightUnit: string;
+}
+
+export interface CreateExerciseInput {
+  exerciseId: number;
+  sets: CreateSetInput[];
+}
+
+export interface CreateWorkoutInput {
+  title: string;
+  workoutDate: Date;
+  exercises: CreateExerciseInput[];
+}
 
 /**
  * Get all workouts for the authenticated user on a specific date
@@ -140,4 +160,61 @@ export async function getRecentWorkouts() {
     .where(eq(workoutsTable.userId, userId))
     .orderBy(desc(workoutsTable.workoutDate))
     .limit(10);
+}
+
+/**
+ * Create a new workout with exercises and sets
+ * @param input - The workout data to create
+ */
+export async function createWorkout(input: CreateWorkoutInput) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  const now = new Date();
+
+  // Create the workout
+  const [workout] = await db
+    .insert(workoutsTable)
+    .values({
+      userId,
+      title: input.title,
+      workoutDate: input.workoutDate,
+      startedAt: now,
+      completedAt: now,
+    })
+    .returning({ id: workoutsTable.id });
+
+  // Create workout exercises and sets
+  for (let i = 0; i < input.exercises.length; i++) {
+    const exercise = input.exercises[i];
+
+    // Create workout exercise
+    const [workoutExercise] = await db
+      .insert(workoutExercisesTable)
+      .values({
+        workoutId: workout.id,
+        exerciseId: exercise.exerciseId,
+        order: i + 1,
+      })
+      .returning({ id: workoutExercisesTable.id });
+
+    // Create sets for this exercise
+    for (let j = 0; j < exercise.sets.length; j++) {
+      const set = exercise.sets[j];
+
+      await db.insert(setsTable).values({
+        workoutExerciseId: workoutExercise.id,
+        setNumber: j + 1,
+        reps: set.reps,
+        weight: set.weight,
+        weightUnit: set.weightUnit,
+      });
+    }
+  }
+
+  revalidatePath("/dashboard");
+  redirect("/dashboard");
 }
